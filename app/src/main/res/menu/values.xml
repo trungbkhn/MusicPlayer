@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_Feedback"
+        android:title="@string/feedback"
+        android:icon="@drawable/ic_feedback"></item>
+
+    <item android:id="@+id/nav_Setting"
+        android:title="@string/setting"
+        android:icon="@drawable/ic_settings"></item>
+
+    <item android:id="@+id/nav_About"
+        android:title="@string/about"
+        android:icon="@drawable/ic_about"></item>
+
+    <item android:id="@+id/nav_Exit"
+        android:title="@string/exit"
+        android:icon="@drawable/ic_exit_to_app"></item>
+
+</menu>

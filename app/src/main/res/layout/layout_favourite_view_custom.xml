@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_margin="15dp"
+    android:theme="@style/Base.Theme.Spotify">
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_songFavourite"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/splash_screen"
+        app:shapeAppearanceOverlay="@style/curved"
+        android:contentDescription="@string/name_song">
+
+    </com.google.android.material.imageview.ShapeableImageView>
+    <TextView
+        android:id="@+id/tv_songName_Favourite"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:textColor="@color/black"
+        android:text="@string/name_song">
+
+    </TextView>
+
+</LinearLayout>

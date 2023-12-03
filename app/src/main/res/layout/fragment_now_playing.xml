@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:background="@color/pink"
+    android:orientation="vertical"
+    android:theme="@style/Base.Theme.Spotify"
+    tools:context=".NowPlayingFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_frg_NowPlaying"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/splash_screen"
+            app:shapeAppearance="@style/curved">
+
+        </com.google.android.material.imageview.ShapeableImageView>
+
+        <TextView
+            android:id="@+id/tv_songname_frg_NowPlaying"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:ellipsize="marquee"
+            android:gravity="center"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/name_song"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"></TextView>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/btn_frg_PausePlay_NowPlaying"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/pink"
+            app:icon="@drawable/ic_play_arrow"
+            app:iconSize="20dp"
+            app:iconTint="@color/white">
+
+        </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/btn_frg_nextSong_NowPlaying"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/pink"
+            app:icon="@drawable/ic_next"
+            app:iconSize="20dp"
+            app:iconTint="@color/white">
+
+        </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+    </LinearLayout>
+
+
+</FrameLayout>
