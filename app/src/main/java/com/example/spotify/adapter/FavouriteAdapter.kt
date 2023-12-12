@@ -15,9 +15,7 @@ import com.example.spotify.databinding.LayoutFavouriteViewCustomBinding
 
 class FavouriteAdapter(private var musicList: ArrayList<Music>, private val context: Context) :
     RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHolder>() {
-    init {
 
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteViewHolder {
         return FavouriteViewHolder(
@@ -57,7 +55,7 @@ class FavouriteAdapter(private var musicList: ArrayList<Music>, private val cont
         ContextCompat.startActivity(context, intent, null)
     }
 
-    fun updateData(newMusicList: ArrayList<Music>) {
+    fun updateFavourites(newMusicList: ArrayList<Music>) {
         musicList = newMusicList
         notifyDataSetChanged()
     }

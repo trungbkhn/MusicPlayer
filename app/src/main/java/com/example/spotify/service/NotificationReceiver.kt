@@ -48,8 +48,13 @@ class NotificationReceiver:BroadcastReceiver() {
         Glide.with(context).load(PlaysongsActivity.musicList[PlaysongsActivity.songPosition].artUrl)
             .apply(RequestOptions().placeholder(R.drawable.splash_screen).centerCrop())
             .into(PlaysongsActivity.binding.imgvPlaySongView)
+
+        Glide.with(context).load(PlaysongsActivity.musicList[PlaysongsActivity.songPosition].artUrl)
+            .apply(RequestOptions().placeholder(R.drawable.splash_screen).centerCrop())
+            .into(NowPlayingFragment.binding.imgFrgNowPlaying)
         PlaysongsActivity.binding.txtSongName.text = PlaysongsActivity.musicList[PlaysongsActivity.songPosition].title
         PlaysongsActivity.binding.tvSongNamePlayer.text = PlaysongsActivity.musicList[PlaysongsActivity.songPosition].album
+        NowPlayingFragment.binding.tvSongnameFrgNowPlaying.text = PlaysongsActivity.musicList[PlaysongsActivity.songPosition].title
         playMusic()
         if (PlaysongsActivity.isFavor){
             PlaysongsActivity.binding.imgbtnHeart.setImageResource(R.drawable.ic_heart)

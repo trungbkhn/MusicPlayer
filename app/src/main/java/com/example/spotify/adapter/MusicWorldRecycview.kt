@@ -15,7 +15,7 @@ import com.example.spotify.data.Music
 import com.example.spotify.data.formatDuration
 import com.example.spotify.databinding.LayoutSongRcvBinding
 
-class MusicWorldRecycview(private val context: Context, private var musicList: ArrayList<Music>) :
+class MusicWorldRecycview(private val context: Context, private var musicList: ArrayList<Music>, private var playlistDetail: Boolean = false) :
     RecyclerView.Adapter<MusicWorldViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicWorldViewHolder {

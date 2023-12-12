@@ -2,7 +2,6 @@ package com.example.spotify
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -13,6 +12,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -29,7 +29,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.io.File
-import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,8 +38,8 @@ class MainActivity : AppCompatActivity() {
         lateinit var MusicListMA: ArrayList<Music>
         lateinit var musicListSearch: ArrayList<Music>
         var isSearching = false
-        private const val PREF_NAME = "MyPrefs"
-        private const val KEY_FAV_LIST = "favoriteList"
+        const val PREF_NAME = "FAVOURITES"
+        const val KEY_FAV_LIST = "MusicListFavourite"
         private lateinit var binding: ActivityMainBinding
         private lateinit var toggle: ActionBarDrawerToggle
         private lateinit var musicAdapter: MusicWorldRecycview
@@ -54,8 +53,7 @@ class MainActivity : AppCompatActivity() {
         setNavDraw()
         if (requestRuntimePermission()) {
             initializeLayout()
-
-            storageDataFavouriteSong()
+            storageDataSong()
         }
 
         setContentView(binding.root)
@@ -89,10 +87,7 @@ class MainActivity : AppCompatActivity() {
                     val builder = MaterialAlertDialogBuilder(this)
                     builder.setTitle("Exit").setMessage("Do you want to close app?")
                         .setPositiveButton("Yes") { _, _ ->
-                            if (PlaysongsActivity.musicService != null) {
                                 exitApp()
-                            }
-                            exitProcess(1)
                         }.setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
                     val customDilog = builder.create()
                     customDilog.show()
@@ -192,17 +187,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun requestRuntimePermission(): Boolean {
 
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                13
-            )
-            return false
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU){
+            if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 13)
+                return false
+            }
+        }
+        //android 13 permission request
+        else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU){
+            if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_MEDIA_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_MEDIA_AUDIO), 13)
+                return false
+            }
         }
         return true
     }
@@ -229,17 +227,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     // sharePreferences
-    private fun storageDataFavouriteSong() {
+    private fun storageDataSong() {
         //FavouriteActivity.musicListFavourite = ArrayList()
-        val sharePreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val favListJson = sharePreferences.getString(KEY_FAV_LIST, null)
-        val type = object : TypeToken<ArrayList<Music>>() {}.type
+        FavouriteActivity.musicListFavourite = ArrayList()
+        val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE)
+        val jsonString = editor.getString("MusicListFavourite", null)
+        val typeToken = object : TypeToken<ArrayList<Music>>(){}.type
+        if(jsonString != null){
 
-        if (favListJson != null) {
-            val data: ArrayList<Music> = GsonBuilder().create().fromJson(favListJson,type)
+            val data: ArrayList<Music> = GsonBuilder().create().fromJson(jsonString, typeToken)
             FavouriteActivity.musicListFavourite.addAll(data)
         }
+
+//        val jsonStringPlaylist = editor.getString("MusicPlaylist", null)
+//        if(jsonStringPlaylist != null){
+//            val dataPlaylist: MusicPlaylist = GsonBuilder().create().fromJson(jsonStringPlaylist, MusicPlaylist::class.java)
+//            PlaylistActivity.musicListPlaylist = dataPlaylist
+//        }
     }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) {
@@ -277,7 +284,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (PlaysongsActivity.isPlay && PlaysongsActivity.musicService != null) {
+        if(!PlaysongsActivity.isPlay && PlaysongsActivity.musicService != null){
             exitApp()
         }
     }
@@ -286,10 +293,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val editor = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit()
-        val favListJson = GsonBuilder().create().toJson(FavouriteActivity.musicListFavourite)
-        editor.putString(KEY_FAV_LIST, favListJson)
-        editor.apply()
+        if(PlaysongsActivity.musicService != null) binding.fgmNowPlaying.visibility = View.VISIBLE
+        //for storing favourites data using shared preferences
+        val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
+        val jsonString = GsonBuilder().create().toJson(FavouriteActivity.musicListFavourite)
+        editor.putString("MusicListFavourite", jsonString)
 
+//        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicListPlaylist)
+//        editor.putString("MusicPlaylist", jsonStringPlaylist)
+        editor.apply()
+        if(PlaysongsActivity.musicService != null) binding.fgmNowPlaying.visibility = View.VISIBLE
     }
 }

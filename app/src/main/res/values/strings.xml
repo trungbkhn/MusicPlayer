@@ -3,7 +3,7 @@
     <string name="shuffle_btn">Shuffle</string>
     <string name="favourites_btn">Favourites</string>
     <string name="playlist_btn">Playlist</string>
-    <string name="total_songs">Total Songs</string>
+    <string name="total_songs">Total songs</string>
     <string name="world_of_music">World of music</string>
     <string name="name_song">Name song</string>
     <string name="back_btn">Back</string>
@@ -21,12 +21,18 @@
     <string name="setting">Setting</string>
     <string name="about">About</string>
     <string name="exit">Exit</string>
-    <string name="album">Song Album</string>
+    <string name="album">Song album</string>
     <string name="min_15">15 Minutes</string>
     <string name="min_30">30 Minutes</string>
     <string name="min_60">60 Minutes</string>
-    <string name="seach_view">Search View</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="seach_view">Search view</string>
+    <string name="song_img">Image song</string>
+    <string name="playlist_name">Playlist name</string>
+    <string name="playlist_delete">Delete playlist</string>
+    <string name="playlist_username">Your name</string>
+    <string name="playlist_detail">Enjoy Time</string>
+    <string name="add_playlist">Add playlist </string>
+    <string name="remove_all">Remove all</string>
+
 
 </resources>

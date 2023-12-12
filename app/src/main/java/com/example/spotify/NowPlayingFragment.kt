@@ -94,6 +94,9 @@ class NowPlayingFragment : Fragment() {
             PlaysongsActivity.binding.sbSeekBar.progress = PlaysongsActivity.musicService!!.mediaPlayer!!.currentPosition
             PlaysongsActivity.binding.sbSeekBar.max = PlaysongsActivity.musicService!!.mediaPlayer!!.duration
         }
+        else{
+            binding.root.visibility = View.INVISIBLE
+        }
 
     }
 

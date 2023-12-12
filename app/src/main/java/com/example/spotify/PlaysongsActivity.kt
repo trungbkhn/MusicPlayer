@@ -43,7 +43,6 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
         var min60 = false
         var musicListId: String = ""
         var isFavor = false
-        //lateinit var favouriteListMusic: ArrayList<Music>
         private var fIndex = -1
     }
 
@@ -52,6 +51,7 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_Spotify)
         setContentView(binding.root)
+        getSupportActionBar()?.hide()
 
 
         initializeLayout()
@@ -157,6 +157,7 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
         }
 
         binding.imgbtnHeart.setOnClickListener {
+            fIndex = checkFavorIndex(musicList[songPosition].id)
             if (isFavor){
                 isFavor = false
                 binding.imgbtnHeart.setImageResource(R.drawable.ic_heart_empty)
@@ -167,6 +168,7 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
                 binding.imgbtnHeart.setImageResource(R.drawable.ic_heart)
                 FavouriteActivity.musicListFavourite.add(musicList[songPosition])
             }
+            FavouriteActivity.favouritesChanged = true
         }
 
 
@@ -190,11 +192,12 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
                 formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
             binding.sbSeekBar.progress = 0
             binding.sbSeekBar.max = musicService!!.mediaPlayer!!.duration
-            musicService!!.showNotification(R.drawable.ic_pause)
             musicService!!.mediaPlayer!!.setOnCompletionListener(this)
+            musicService!!.showNotification(R.drawable.ic_pause)
             musicListId = musicList[songPosition].id
+            playMusic()
         } catch (e: Exception) {
-            return
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -239,12 +242,12 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
                 setLayout()
             }
 
-            "PlaysongsActivity" -> {
+            "FavouriteShuffle" -> {
                 val intent = Intent(this, MusicService::class.java)
                 bindService(intent, this, BIND_AUTO_CREATE)
                 startService(intent)
                 musicList = ArrayList()
-                musicList.addAll(MainActivity.MusicListMA)
+                musicList.addAll(FavouriteActivity.musicListFavourite)
                 musicList.shuffle()
                 setLayout()
             }
@@ -312,6 +315,15 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
             createMediaPlayer()
         }
     }
+    private fun initServiceAndPlaylist(playlist: ArrayList<Music>, shuffle: Boolean, playNext: Boolean = false){
+        val intent = Intent(this, MusicService::class.java)
+        bindService(intent, this, BIND_AUTO_CREATE)
+        startService(intent)
+        musicList = ArrayList()
+        musicList.addAll(playlist)
+        if(shuffle) musicList.shuffle()
+        setLayout()
+    }
 
     private fun showTimerDialog() {
         val dialog = BottomSheetDialog(this@PlaysongsActivity)
@@ -363,15 +375,20 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
     }
 
     override fun onCompletion(p0: MediaPlayer?) {
-        setSongPosition(true)
+        setSongPosition(increment = true)
         createMediaPlayer()
-        try {
-            setLayout()
-        } catch (e: Exception) {
-            return
-        }
+        setLayout()
+
+        //for refreshing now playing image & text on song completion
+        NowPlayingFragment.binding.tvSongnameFrgNowPlaying.isSelected = true
+        Glide.with(applicationContext)
+            .load(musicList[songPosition].artUrl)
+            .apply(RequestOptions().placeholder(R.drawable.splash_screen).centerCrop())
+            .into(NowPlayingFragment.binding.imgFrgNowPlaying)
+        NowPlayingFragment.binding.tvSongnameFrgNowPlaying.text = musicList[songPosition].title
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 13 || requestCode == RESULT_OK) {
@@ -385,6 +402,12 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
             binding.sbSeekBar.progress = musicService!!.mediaPlayer!!.currentPosition
             binding.sbSeekBar.max = musicService!!.mediaPlayer!!.duration
         }
+        
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(musicList[songPosition].id == "Unknown" && !isPlay) exitApp()
     }
 
 
