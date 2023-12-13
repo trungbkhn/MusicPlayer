@@ -116,16 +116,13 @@ class MusicService : Service() {
         }
     }
 
-    fun seekBarSetUp() {
+    fun seekBarSetup(){
         runnable = Runnable {
-            PlaysongsActivity.binding.tvTimeRunSeekBarStart.text =
-                formatDuration(mediaPlayer!!.currentPosition.toLong())
-            PlaysongsActivity.binding.tvTimeRunSeekBarEnd.text =
-                formatDuration(mediaPlayer!!.duration.toLong())
-            Handler(Looper.getMainLooper()).postDelayed(runnable,200)
+            PlaysongsActivity.binding.tvTimeRunSeekBarStart.text = formatDuration(mediaPlayer!!.currentPosition.toLong())
+            PlaysongsActivity.binding.sbSeekBar.progress = mediaPlayer!!.currentPosition
+            Handler(Looper.getMainLooper()).postDelayed(runnable, 200)
         }
-        Handler(Looper.getMainLooper()).postDelayed(runnable,0)
-
+        Handler(Looper.getMainLooper()).postDelayed(runnable, 0)
     }
 
 

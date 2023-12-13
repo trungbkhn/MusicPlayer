@@ -73,8 +73,22 @@
         app:strokeColor="#E91E63"
         app:strokeWidth="2dp">
 
-    </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
 
+    </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+    <TextView
+        android:id="@+id/instructionFV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/favourite_note"
+        android:textSize="20sp"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textColor="?attr/dialogBtnBackground"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_favouriteSong"
         android:layout_width="match_parent"

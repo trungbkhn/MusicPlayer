@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spotify.adapter.MusicWorldRecycview
 import com.example.spotify.data.Music
+import com.example.spotify.data.MusicPlaylist
 import com.example.spotify.data.exitApp
 import com.example.spotify.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         lateinit var musicListSearch: ArrayList<Music>
         var isSearching = false
         const val PREF_NAME = "FAVOURITES"
-        const val KEY_FAV_LIST = "MusicListFavourite"
+        const val KEY_FAV_LIST = "FavouriteSongs"
         private lateinit var binding: ActivityMainBinding
         private lateinit var toggle: ActionBarDrawerToggle
         private lateinit var musicAdapter: MusicWorldRecycview
@@ -231,19 +232,18 @@ class MainActivity : AppCompatActivity() {
         //FavouriteActivity.musicListFavourite = ArrayList()
         FavouriteActivity.musicListFavourite = ArrayList()
         val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE)
-        val jsonString = editor.getString("MusicListFavourite", null)
+        val jsonString = editor.getString("FavouriteSongs", null)
         val typeToken = object : TypeToken<ArrayList<Music>>(){}.type
         if(jsonString != null){
-
             val data: ArrayList<Music> = GsonBuilder().create().fromJson(jsonString, typeToken)
             FavouriteActivity.musicListFavourite.addAll(data)
         }
 
-//        val jsonStringPlaylist = editor.getString("MusicPlaylist", null)
-//        if(jsonStringPlaylist != null){
-//            val dataPlaylist: MusicPlaylist = GsonBuilder().create().fromJson(jsonStringPlaylist, MusicPlaylist::class.java)
-//            PlaylistActivity.musicListPlaylist = dataPlaylist
-//        }
+        val jsonStringPlaylist = editor.getString("MusicPlaylist", null)
+        if(jsonStringPlaylist != null){
+            val dataPlaylist: MusicPlaylist = GsonBuilder().create().fromJson(jsonStringPlaylist, MusicPlaylist::class.java)
+            PlaylistActivity.musicListPlaylist = dataPlaylist
+        }
     }
 
 
@@ -293,14 +293,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(PlaysongsActivity.musicService != null) binding.fgmNowPlaying.visibility = View.VISIBLE
+
         //for storing favourites data using shared preferences
         val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
         val jsonString = GsonBuilder().create().toJson(FavouriteActivity.musicListFavourite)
-        editor.putString("MusicListFavourite", jsonString)
-
-//        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicListPlaylist)
-//        editor.putString("MusicPlaylist", jsonStringPlaylist)
+        editor.putString("FavouriteSongs", jsonString)
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicListPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
         editor.apply()
         if(PlaysongsActivity.musicService != null) binding.fgmNowPlaying.visibility = View.VISIBLE
     }

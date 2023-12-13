@@ -106,6 +106,23 @@ fun exitApp(){
     exitProcess(1)
 
 }
+//fun setDialogBtnBackground(context: Context, dialog: AlertDialog){
+//    //setting button text
+//    dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE)?.setTextColor(
+//        MaterialColors.getColor(context, R.attr.dialog, Color.WHITE)
+//    )
+//    dialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE)?.setTextColor(
+//        MaterialColors.getColor(context, R.attr.dialogTextColor, Color.WHITE)
+//    )
+//
+//    //setting button background
+//    dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE)?.setBackgroundColor(
+//        MaterialColors.getColor(context, R.attr.dialogBtnBackground, Color.RED)
+//    )
+//    dialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE)?.setBackgroundColor(
+//        MaterialColors.getColor(context, R.attr.dialogBtnBackground, Color.RED)
+//    )
+//}
 
 
 

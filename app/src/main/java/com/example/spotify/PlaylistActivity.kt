@@ -93,4 +93,9 @@ class PlaylistActivity : AppCompatActivity() {
             adapter.refreshPlaylist()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.notifyDataSetChanged()
+    }
 }

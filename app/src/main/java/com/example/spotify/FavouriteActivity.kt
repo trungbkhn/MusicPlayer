@@ -17,10 +17,11 @@ private lateinit var adapter: FavouriteAdapter
 
 
 class FavouriteActivity : AppCompatActivity() {
-    companion object{
+    companion object {
         var musicListFavourite = ArrayList<Music>()
         var favouritesChanged: Boolean = false
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityFavouriteBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -42,12 +43,13 @@ class FavouriteActivity : AppCompatActivity() {
         binding.rcvFavouriteSong.setItemViewCacheSize(13)
         binding.rcvFavouriteSong.layoutManager =
             GridLayoutManager(this, 3, RecyclerView.VERTICAL, false)
-        adapter = FavouriteAdapter(musicListFavourite,this)
+        adapter = FavouriteAdapter(musicListFavourite, this)
         binding.rcvFavouriteSong.adapter = adapter
         favouritesChanged = false
-        if(musicListFavourite.size < 1){
+        if (musicListFavourite.size < 1) {
             binding.btnShuffleFavourite.visibility = View.INVISIBLE
         }
+        if (musicListFavourite.isNotEmpty()) binding.instructionFV.visibility = View.GONE
         binding.btnShuffleFavourite.setOnClickListener {
             val intent = Intent(this, PlaysongsActivity::class.java)
             intent.putExtra("index", 1)
@@ -60,7 +62,7 @@ class FavouriteActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        if(favouritesChanged) {
+        if (favouritesChanged) {
             adapter.updateFavourites(musicListFavourite)
             favouritesChanged = false
         }

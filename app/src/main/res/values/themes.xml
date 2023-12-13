@@ -16,4 +16,11 @@
         <item name="android:statusBarColor">#E91E63</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
+    <attr name="themeColor" format="color"/>
+
+    <!--    Background as well as text color for alert dialog buttons-->
+    <attr name="dialogTextColor" format="color"/>
+    <attr name="dialogBtnBackground" format="color"/>
+
+
 </resources>

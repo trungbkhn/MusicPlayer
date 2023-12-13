@@ -9,13 +9,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.spotify.MainActivity
+import com.example.spotify.PlaylistActivity
+import com.example.spotify.PlaylistDetailsActivity
 import com.example.spotify.PlaysongsActivity
 import com.example.spotify.R
+import com.example.spotify.SelectionActivity
 import com.example.spotify.data.Music
 import com.example.spotify.data.formatDuration
 import com.example.spotify.databinding.LayoutSongRcvBinding
 
-class MusicWorldRecycview(private val context: Context, private var musicList: ArrayList<Music>, private var playlistDetail: Boolean = false) :
+class MusicWorldRecycview(
+    private val context: Context,
+    private var musicList: ArrayList<Music>,
+    private val playlistDetail: Boolean = false,
+    private val listSearch: Boolean = false
+) :
     RecyclerView.Adapter<MusicWorldViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicWorldViewHolder {
@@ -39,16 +47,40 @@ class MusicWorldRecycview(private val context: Context, private var musicList: A
         Glide.with(context).load(musicList[position].artUrl)
             .apply(RequestOptions().placeholder(R.drawable.splash_screen).centerCrop())
             .into(holder.image)
-        holder.root.setOnClickListener {
-            when {
-                MainActivity.isSearching -> sendIntent("MusicAdapterSearch", position)
-                musicList[position].id == PlaysongsActivity.musicListId -> sendIntent(
-                    "NowPlayingFragment",
-                    PlaysongsActivity.songPosition
-                )
-                else -> sendIntent("MusicWorldRecycview", position)
+        when {
+            playlistDetail -> holder.root.setOnClickListener {
+                sendIntent("PlaylistDetailsAdapter", position)
             }
 
+            listSearch -> holder.root.setOnClickListener {
+                if (addSong(musicList[position])) {
+                    holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.pink))
+                } else {
+                    holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                }
+                when{
+                SelectionActivity.isSearchSelection -> sendIntent("MusicAdapterSearch", position)
+                musicList[position].id == PlaysongsActivity.musicListId -> sendIntent(
+                "NowPlayingFragment",
+                PlaysongsActivity.songPosition
+                )}
+            }
+
+            else -> {
+                holder.root.setOnClickListener {
+                    when {
+                        MainActivity.isSearching -> sendIntent("MusicAdapterSearch", position)
+                        musicList[position].id == PlaysongsActivity.musicListId -> sendIntent(
+                            "NowPlayingFragment",
+                            PlaysongsActivity.songPosition
+                        )
+
+
+                        else -> sendIntent("MusicWorldRecycview", position)
+                    }
+
+                }
+            }
         }
     }
 
@@ -65,5 +97,27 @@ class MusicWorldRecycview(private val context: Context, private var musicList: A
         musicList.addAll(searchList)
         notifyDataSetChanged()
     }
+
+    fun addSong(song: Music): Boolean {
+        PlaylistActivity.musicListPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList.forEachIndexed { index, music ->
+            if (song.id == music.id) {
+                PlaylistActivity.musicListPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList.removeAt(
+                    index
+                )
+                return false
+            }
+
+        }
+        PlaylistActivity.musicListPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList.add(
+            song)
+        return true
+    }
+    fun refreshPlaylist(){
+        musicList = ArrayList()
+        musicList = PlaylistActivity.musicListPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList
+        notifyDataSetChanged()
+    }
+
+
 
 }

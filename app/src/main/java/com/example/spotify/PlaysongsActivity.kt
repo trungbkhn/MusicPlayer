@@ -251,6 +251,16 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
                 musicList.shuffle()
                 setLayout()
             }
+            "PlaylistDetailsAdapter" -> {
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
+                musicList = ArrayList()
+                musicList.addAll(PlaylistActivity.musicListPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList)
+                musicList.shuffle()
+                setLayout()
+            }
+//
         }
 
     }
@@ -366,12 +376,13 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
         val binder = p1 as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
-        musicService!!.seekBarSetUp()
+        musicService!!.seekBarSetup()
 
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {
         musicService = null
+
     }
 
     override fun onCompletion(p0: MediaPlayer?) {

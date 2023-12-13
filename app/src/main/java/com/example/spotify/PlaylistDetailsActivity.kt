@@ -1,5 +1,6 @@
 package com.example.spotify
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -8,10 +9,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.spotify.adapter.MusicWorldRecycview
 import com.example.spotify.databinding.ActivityPlaylistDetailsBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
 
 class PlaylistDetailsActivity : AppCompatActivity() {
-    lateinit var binding: ActivityPlaylistDetailsBinding
-    lateinit var adapter: MusicWorldRecycview
+    private lateinit var binding: ActivityPlaylistDetailsBinding
+    private lateinit var adapter: MusicWorldRecycview
 
     companion object {
         var currentPlaylistPos = -1
@@ -27,15 +30,41 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         binding.rcvPlaylistDetailSong.setItemViewCacheSize(13)
         binding.rcvPlaylistDetailSong.setHasFixedSize(true)
         binding.rcvPlaylistDetailSong.layoutManager = LinearLayoutManager(this)
-        PlaylistActivity.musicListPlaylist.ref[currentPlaylistPos].playList.addAll(MainActivity.MusicListMA)
         adapter = MusicWorldRecycview(
             this,
             PlaylistActivity.musicListPlaylist.ref[currentPlaylistPos].playList,
             true
         )
         binding.rcvPlaylistDetailSong.adapter = adapter
-    }
+        binding.btnBackPlaylistDetail.setOnClickListener {
+            val intent = Intent(this, PlaylistActivity::class.java)
+            PlaylistActivity.musicListPlaylist.ref[currentPlaylistPos].playList.removeAll(
+                MainActivity.MusicListMA
+            )
+            startActivity(intent)
+        }
+        binding.btnAddPlaylist.setOnClickListener {
+            val intent = Intent(this, SelectionActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btnRemovePlaylist.setOnClickListener {
+            val builder = MaterialAlertDialogBuilder(this)
+            builder.setTitle("Remove")
+                .setMessage("Do you want to remove all songs from playlist?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    PlaylistActivity.musicListPlaylist.ref[currentPlaylistPos].playList.clear()
+                    adapter.refreshPlaylist()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+            val customDialog = builder.create()
+            customDialog.show()
 
+//            setDialogBtnBackground(this, customDialog)
+        }
+    }
     override fun onResume() {
         super.onResume()
         binding.txtPlaylistName.text =
@@ -55,6 +84,15 @@ class PlaylistDetailsActivity : AppCompatActivity() {
             }.into(binding.imgvDetailPlaylistSong)
             binding.rcvPlaylistDetailSong.visibility = View.VISIBLE
         }
+        adapter.notifyDataSetChanged()
+
+        //for storing favourites data using shared preferences
+        val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicListPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
+        editor.apply()
 
     }
 }
+
+
