@@ -39,8 +39,6 @@ class MainActivity : AppCompatActivity() {
         lateinit var MusicListMA: ArrayList<Music>
         lateinit var musicListSearch: ArrayList<Music>
         var isSearching = false
-        const val PREF_NAME = "FAVOURITES"
-        const val KEY_FAV_LIST = "FavouriteSongs"
         private lateinit var binding: ActivityMainBinding
         private lateinit var toggle: ActionBarDrawerToggle
         private lateinit var musicAdapter: MusicWorldRecycview
@@ -52,12 +50,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //set layout
         setNavDraw()
+
+
+        setContentView(binding.root)
         if (requestRuntimePermission()) {
             initializeLayout()
             storageDataSong()
         }
-
-        setContentView(binding.root)
         //set on click listener
         onClickListener()
 
@@ -229,7 +228,6 @@ class MainActivity : AppCompatActivity() {
 
     // sharePreferences
     private fun storageDataSong() {
-        //FavouriteActivity.musicListFavourite = ArrayList()
         FavouriteActivity.musicListFavourite = ArrayList()
         val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE)
         val jsonString = editor.getString("FavouriteSongs", null)
@@ -239,11 +237,13 @@ class MainActivity : AppCompatActivity() {
             FavouriteActivity.musicListFavourite.addAll(data)
         }
 
+        PlaylistActivity.musicListPlaylist = MusicPlaylist()
         val jsonStringPlaylist = editor.getString("MusicPlaylist", null)
         if(jsonStringPlaylist != null){
             val dataPlaylist: MusicPlaylist = GsonBuilder().create().fromJson(jsonStringPlaylist, MusicPlaylist::class.java)
             PlaylistActivity.musicListPlaylist = dataPlaylist
         }
+        Log.d("Myref", "Da mo")
     }
 
 
@@ -287,6 +287,14 @@ class MainActivity : AppCompatActivity() {
         if(!PlaysongsActivity.isPlay && PlaysongsActivity.musicService != null){
             exitApp()
         }
+        //for storing favourites data using shared preferences
+        val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
+        val jsonString = GsonBuilder().create().toJson(FavouriteActivity.musicListFavourite)
+        editor.putString("FavouriteSongs", jsonString)
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicListPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
+        editor.apply()
+        Log.d("Myref", "Da luu")
     }
 
 
@@ -302,5 +310,19 @@ class MainActivity : AppCompatActivity() {
         editor.putString("MusicPlaylist", jsonStringPlaylist)
         editor.apply()
         if(PlaysongsActivity.musicService != null) binding.fgmNowPlaying.visibility = View.VISIBLE
+        Log.d("Myref", "Da luu")
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        // Store favorites and playlist data in SharedPreferences
+        val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
+        val jsonString = GsonBuilder().create().toJson(FavouriteActivity.musicListFavourite)
+        editor.putString("FavouriteSongs", jsonString)
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicListPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
+        editor.apply()
+        Log.d("Myref", "Da luu")
     }
 }

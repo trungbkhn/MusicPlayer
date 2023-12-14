@@ -1,13 +1,11 @@
 package com.example.spotify
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.spotify.MainActivity
 import com.example.spotify.adapter.PlaylistAdapter
 import com.example.spotify.data.MusicPlaylist
 import com.example.spotify.data.Playlist
@@ -37,8 +35,7 @@ class PlaylistActivity : AppCompatActivity() {
 
 
         binding.btnBackPlaylist.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
         binding.rcvPlaylistSong.setHasFixedSize(true)
         binding.rcvPlaylistSong.setItemViewCacheSize(13)

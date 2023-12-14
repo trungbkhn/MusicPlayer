@@ -108,8 +108,7 @@ class MusicService : Service() {
             PlaysongsActivity.binding.tvTimeRunSeekBarEnd.text =
                 formatDuration(mediaPlayer!!.duration.toLong())
             PlaysongsActivity.binding.sbSeekBar.progress = 0
-            PlaysongsActivity.binding.sbSeekBar.max =
-                PlaysongsActivity.musicService!!.mediaPlayer!!.duration
+            PlaysongsActivity.binding.sbSeekBar.max = PlaysongsActivity.musicService!!.mediaPlayer!!.duration
             PlaysongsActivity.musicListId = PlaysongsActivity.musicList[PlaysongsActivity.songPosition].id
         } catch (e: Exception) {
             return

@@ -1,14 +1,9 @@
 package com.example.spotify.data
 
-import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import com.example.spotify.FavouriteActivity
-import com.example.spotify.MainActivity
-import com.example.spotify.PlaylistActivity
 import com.example.spotify.PlaysongsActivity
-import com.google.gson.GsonBuilder
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
@@ -88,23 +83,14 @@ fun checkPlaylist(playlist: ArrayList<Music>): ArrayList<Music>{
     return playlist
 }
 
-fun saveFavoriteList(context: Context) {
-    val editor = context.getSharedPreferences(MainActivity.PREF_NAME, AppCompatActivity.MODE_PRIVATE).edit()
-    val jsonString = GsonBuilder().create().toJson(FavouriteActivity.musicListFavourite)
-    editor.putString("MusicListFavourite", jsonString)
-    val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicListPlaylist)
-    editor.putString("MusicPlaylist", jsonStringPlaylist)
-    editor.apply()
-
-}
 fun exitApp(){
     Log.d("ExitApp", "ExitApp function called")
     if(PlaysongsActivity.musicService != null){
         PlaysongsActivity.musicService!!.stopForeground(true)
         PlaysongsActivity.musicService!!.mediaPlayer!!.release()
-        PlaysongsActivity.musicService = null}
+        PlaysongsActivity.musicService = null
+        }
     exitProcess(1)
-
 }
 //fun setDialogBtnBackground(context: Context, dialog: AlertDialog){
 //    //setting button text

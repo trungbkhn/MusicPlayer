@@ -61,6 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
+        android:contentDescription="@string/favourites_btn"
         app:icon="@drawable/ic_shuffle"
         app:iconSize="35dp"
         app:iconTint="#E91E63"
@@ -87,7 +88,7 @@
         android:textSize="20sp"
         android:padding="16dp"
         android:gravity="center"
-        android:textColor="?attr/dialogBtnBackground"
+
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_favouriteSong"

@@ -61,8 +61,7 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
 
     private fun btnClick() {
         binding.imgbtnBack.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
 
         binding.btnPausePlaySong.setOnClickListener {

@@ -37,11 +37,7 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         )
         binding.rcvPlaylistDetailSong.adapter = adapter
         binding.btnBackPlaylistDetail.setOnClickListener {
-            val intent = Intent(this, PlaylistActivity::class.java)
-            PlaylistActivity.musicListPlaylist.ref[currentPlaylistPos].playList.removeAll(
-                MainActivity.MusicListMA
-            )
-            startActivity(intent)
+            finish()
         }
         binding.btnAddPlaylist.setOnClickListener {
             val intent = Intent(this, SelectionActivity::class.java)

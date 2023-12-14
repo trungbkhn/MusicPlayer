@@ -23,8 +23,8 @@ class FavouriteActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityFavouriteBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        binding = ActivityFavouriteBinding.inflate(layoutInflater)
         setTheme(R.style.Theme_Spotify)
         setContentView(binding.root)
         getSupportActionBar()?.hide()
@@ -34,8 +34,7 @@ class FavouriteActivity : AppCompatActivity() {
         adapter = FavouriteAdapter(musicListFavourite, this)
 
         binding.btnBackFavourite.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
 
 
@@ -52,13 +51,12 @@ class FavouriteActivity : AppCompatActivity() {
         if (musicListFavourite.isNotEmpty()) binding.instructionFV.visibility = View.GONE
         binding.btnShuffleFavourite.setOnClickListener {
             val intent = Intent(this, PlaysongsActivity::class.java)
-            intent.putExtra("index", 1)
+            intent.putExtra("index", 0)
             intent.putExtra("class", "FavouriteShuffle")
             startActivity(intent)
         }
 
     }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()

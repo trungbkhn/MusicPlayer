@@ -32,9 +32,12 @@ class FavouriteAdapter(private var musicList: ArrayList<Music>, private val cont
             .into(holder.image)
         
         // Xử lý sự kiện click
-        holder.itemView.setOnClickListener {
-            sendIntent("FavouriteAdapter", position)
-        }
+        holder.root.setOnClickListener {
+                val intent = Intent(context, PlaysongsActivity::class.java)
+                intent.putExtra("index", position)
+                intent.putExtra("class", "FavouriteAdapter")
+                ContextCompat.startActivity(context, intent, null)
+            }
     }
 
     override fun getItemCount(): Int {
@@ -46,6 +49,7 @@ class FavouriteAdapter(private var musicList: ArrayList<Music>, private val cont
 
         val image = binding.imgSongFavourite
         val songName = binding.tvSongNameFavourite
+        val root = binding.root
     }
 
     fun sendIntent(ref: String, pos: Int) {
@@ -56,7 +60,8 @@ class FavouriteAdapter(private var musicList: ArrayList<Music>, private val cont
     }
 
     fun updateFavourites(newMusicList: ArrayList<Music>) {
-        musicList = newMusicList
+        musicList = ArrayList()
+        musicList.addAll(newMusicList)
         notifyDataSetChanged()
     }
 

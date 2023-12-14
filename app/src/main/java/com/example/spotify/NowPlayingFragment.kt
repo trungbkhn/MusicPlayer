@@ -100,4 +100,9 @@ class NowPlayingFragment : Fragment() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.root.visibility = View.INVISIBLE
+    }
+
 }
