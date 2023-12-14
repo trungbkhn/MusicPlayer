@@ -240,6 +240,15 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
                 musicList.addAll(MainActivity.MusicListMA)
                 setLayout()
             }
+            "mainShuffle" -> {
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
+                musicList = ArrayList()
+                musicList.addAll(MainActivity.MusicListMA)
+                musicList.shuffle()
+                setLayout()
+            }
 
             "FavouriteShuffle" -> {
                 val intent = Intent(this, MusicService::class.java)
@@ -256,7 +265,6 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
                 startService(intent)
                 musicList = ArrayList()
                 musicList.addAll(PlaylistActivity.musicListPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList)
-                musicList.shuffle()
                 setLayout()
             }
 //

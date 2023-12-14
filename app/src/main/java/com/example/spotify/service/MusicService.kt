@@ -37,13 +37,22 @@ class MusicService : Service() {
 
 
     fun showNotification(btn_PlayPause: Int) {
-        val intent = Intent(baseContext, MainActivity::class.java)
 
         val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_IMMUTABLE
         } else {
             PendingIntent.FLAG_UPDATE_CURRENT
         }
+
+        val intentPlaySong = Intent(baseContext, PlaysongsActivity::class.java)
+        intentPlaySong.putExtra("index", PlaysongsActivity.songPosition)
+        intentPlaySong.putExtra("class", "NowPlayingFragment")
+        val contentIntent = PendingIntent.getActivity(
+            this, 0, intentPlaySong, flag
+        )
+        val intent = Intent(baseContext, MainActivity::class.java)
+
+
 
         val prevIntent = Intent(
             baseContext,
@@ -73,6 +82,7 @@ class MusicService : Service() {
 
         val notification =
             NotificationCompat.Builder(baseContext, ApplicationMusic.CHANNEL_ID)
+                .setContentIntent(contentIntent)
                 .setContentTitle(PlaysongsActivity.musicList[PlaysongsActivity.songPosition].title)
                 .setContentText(PlaysongsActivity.musicList[PlaysongsActivity.songPosition].artist)
                 .setSmallIcon(R.drawable.ic_music)
@@ -108,16 +118,19 @@ class MusicService : Service() {
             PlaysongsActivity.binding.tvTimeRunSeekBarEnd.text =
                 formatDuration(mediaPlayer!!.duration.toLong())
             PlaysongsActivity.binding.sbSeekBar.progress = 0
-            PlaysongsActivity.binding.sbSeekBar.max = PlaysongsActivity.musicService!!.mediaPlayer!!.duration
-            PlaysongsActivity.musicListId = PlaysongsActivity.musicList[PlaysongsActivity.songPosition].id
+            PlaysongsActivity.binding.sbSeekBar.max =
+                PlaysongsActivity.musicService!!.mediaPlayer!!.duration
+            PlaysongsActivity.musicListId =
+                PlaysongsActivity.musicList[PlaysongsActivity.songPosition].id
         } catch (e: Exception) {
             return
         }
     }
 
-    fun seekBarSetup(){
+    fun seekBarSetup() {
         runnable = Runnable {
-            PlaysongsActivity.binding.tvTimeRunSeekBarStart.text = formatDuration(mediaPlayer!!.currentPosition.toLong())
+            PlaysongsActivity.binding.tvTimeRunSeekBarStart.text =
+                formatDuration(mediaPlayer!!.currentPosition.toLong())
             PlaysongsActivity.binding.sbSeekBar.progress = mediaPlayer!!.currentPosition
             Handler(Looper.getMainLooper()).postDelayed(runnable, 200)
         }

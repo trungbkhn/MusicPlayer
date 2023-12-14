@@ -66,7 +66,6 @@ class PlaylistAdapter(
             val intent = Intent(context, PlaylistDetailsActivity::class.java)
             intent.putExtra("PlaylistDetailActivity", position)
             ContextCompat.startActivity(context, intent, null)
-
         }
         if (PlaylistActivity.musicListPlaylist.ref[position].playList.size > 0) {
             Glide.with(context)

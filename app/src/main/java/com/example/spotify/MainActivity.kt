@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         }
         storageDataSong()
+
         //set on click listener
         onClickListener()
 
@@ -76,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnShuffle.setOnClickListener {
             val intent = Intent(this@MainActivity, PlaysongsActivity::class.java)
             intent.putExtra("index", 0)
-            intent.putExtra("class", "PlaysongsActivity")
+            intent.putExtra("class", "mainShuffle")
             startActivity(intent)
         }
         binding.navMain.setNavigationItemSelectedListener {
