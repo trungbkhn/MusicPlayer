@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.spotify.adapter.MusicWorldRecycview
+import com.example.spotify.data.checkPlaylist
 import com.example.spotify.databinding.ActivityPlaylistDetailsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
@@ -27,6 +28,7 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         getSupportActionBar()?.hide()
         currentPlaylistPos = intent.extras?.getInt("PlaylistDetailsActivity") as Int
+        PlaylistActivity.musicListPlaylist.ref[currentPlaylistPos].playList = checkPlaylist(PlaylistActivity.musicListPlaylist.ref[currentPlaylistPos].playList)
         binding.rcvPlaylistDetailSong.setItemViewCacheSize(13)
         binding.rcvPlaylistDetailSong.setHasFixedSize(true)
         binding.rcvPlaylistDetailSong.layoutManager = LinearLayoutManager(this)

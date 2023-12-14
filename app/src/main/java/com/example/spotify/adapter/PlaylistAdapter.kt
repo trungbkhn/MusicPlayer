@@ -66,10 +66,11 @@ class PlaylistAdapter(
             val intent = Intent(context, PlaylistDetailsActivity::class.java)
             intent.putExtra("PlaylistDetailActivity", position)
             ContextCompat.startActivity(context, intent, null)
+
         }
         if (PlaylistActivity.musicListPlaylist.ref[position].playList.size > 0) {
             Glide.with(context)
-                .load(PlaylistActivity.musicListPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList[0].artUrl)
+                .load(PlaylistActivity.musicListPlaylist.ref[position].playList[0].artUrl)
                 .apply { RequestOptions().placeholder(R.drawable.splash_screen).centerCrop() }.into(holder.image)
         }
     }

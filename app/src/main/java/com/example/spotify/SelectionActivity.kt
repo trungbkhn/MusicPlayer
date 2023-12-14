@@ -31,10 +31,14 @@ class SelectionActivity : AppCompatActivity() {
             MainActivity.MusicListMA, listSearch = true
         )
         binding.rcvSearchSong.adapter = adapter
+        binding.btnBackSeachSong.setOnClickListener {
+            finish()
+        }
         binding.svSeachViewDetailPlaylist.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
+
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 MainActivity.musicListSearch = ArrayList<Music>()

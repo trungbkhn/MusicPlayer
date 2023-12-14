@@ -55,8 +55,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         if (requestRuntimePermission()) {
             initializeLayout()
-            storageDataSong()
+
         }
+        storageDataSong()
         //set on click listener
         onClickListener()
 
