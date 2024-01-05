@@ -82,9 +82,9 @@ class MainActivity : AppCompatActivity() {
         }
         binding.navMain.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.nav_Feedback -> Toast.makeText(this, "1", Toast.LENGTH_SHORT).show()
-                R.id.nav_About -> Toast.makeText(this, "2", Toast.LENGTH_SHORT).show()
-                R.id.nav_Setting -> Toast.makeText(this, "3", Toast.LENGTH_SHORT).show()
+                R.id.nav_Feedback -> startActivity(Intent(this@MainActivity, FeedbackActivity::class.java))
+                R.id.nav_About -> startActivity(Intent(this@MainActivity, AboutActivity::class.java))
+                R.id.nav_Setting -> startActivity(Intent(this@MainActivity, SettingActivity::class.java))
                 R.id.nav_Exit -> {
                     val builder = MaterialAlertDialogBuilder(this)
                     builder.setTitle("Exit").setMessage("Do you want to close app?")

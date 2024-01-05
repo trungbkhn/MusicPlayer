@@ -86,6 +86,7 @@ fun checkPlaylist(playlist: ArrayList<Music>): ArrayList<Music>{
 fun exitApp(){
     Log.d("ExitApp", "ExitApp function called")
     if(PlaysongsActivity.musicService != null){
+        PlaysongsActivity.musicService!!.audioManager.abandonAudioFocus(PlaysongsActivity.musicService)
         PlaysongsActivity.musicService!!.stopForeground(true)
         PlaysongsActivity.musicService!!.mediaPlayer!!.release()
         PlaysongsActivity.musicService = null

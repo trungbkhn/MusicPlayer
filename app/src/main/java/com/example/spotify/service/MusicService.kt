@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
@@ -13,16 +14,19 @@ import android.os.Looper
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 import com.example.spotify.MainActivity
+import com.example.spotify.NowPlayingFragment
 import com.example.spotify.PlaysongsActivity
 import com.example.spotify.R
 import com.example.spotify.data.formatDuration
 import com.example.spotify.data.getImgArt
 
-class MusicService : Service() {
+class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
     private val myBinder = MyBinder()
     var mediaPlayer: MediaPlayer? = null
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var runnable: Runnable
+    lateinit var audioManager: AudioManager
+
 
     override fun onBind(p0: Intent?): IBinder? {
         mediaSession = MediaSessionCompat(baseContext, "My music")
@@ -44,9 +48,7 @@ class MusicService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT
         }
 
-        val intentPlaySong = Intent(baseContext, PlaysongsActivity::class.java)
-        intentPlaySong.putExtra("index", PlaysongsActivity.songPosition)
-        intentPlaySong.putExtra("class", "NowPlayingFragment")
+        val intentPlaySong = Intent(baseContext, MainActivity::class.java)
         val contentIntent = PendingIntent.getActivity(
             this, 0, intentPlaySong, flag
         )
@@ -137,6 +139,22 @@ class MusicService : Service() {
         Handler(Looper.getMainLooper()).postDelayed(runnable, 0)
     }
 
+    override fun onAudioFocusChange(focusChange: Int) {
+        if (focusChange <= 0 ){
+            PlaysongsActivity.binding.btnPausePlaySong.setIconResource(R.drawable.ic_play_arrow)
+            NowPlayingFragment.binding.btnFrgPausePlayNowPlaying.setIconResource(R.drawable.ic_play_arrow)
+            showNotification(R.drawable.ic_play_arrow)
+            PlaysongsActivity.isPlay = false
+            mediaPlayer!!.pause()
+        }
+        else{
+            PlaysongsActivity.binding.btnPausePlaySong.setIconResource(R.drawable.ic_pause)
+            NowPlayingFragment.binding.btnFrgPausePlayNowPlaying.setIconResource(R.drawable.ic_pause)
+            showNotification(R.drawable.ic_pause)
+            PlaysongsActivity.isPlay = true
+            mediaPlayer!!.start()
+        }
+    }
 }
 
 

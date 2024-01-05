@@ -2,9 +2,11 @@ package com.example.spotify
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Color
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
 import android.net.Uri
@@ -212,6 +214,7 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
                 setLayout()
             }
             "NowPlayingFragment"->{
+
                 setLayout()
                 //setSeekBar
                 binding.tvTimeRunSeekBarStart.text = formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
@@ -384,11 +387,14 @@ class PlaysongsActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.On
         musicService = binder.currentService()
         createMediaPlayer()
         musicService!!.seekBarSetup()
+        musicService!!.audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        musicService!!.audioManager.requestAudioFocus(musicService, AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN)
 
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {
         musicService = null
+
 
     }
 
